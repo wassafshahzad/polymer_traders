@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.db.models.fields import CharField
 
 
 class ChemicalTypeModel(models.Model):
@@ -12,3 +13,11 @@ class ChemicalTypeModel(models.Model):
 
     def __str__(self):
         return self.chem_type
+
+
+class ChemicalModel(models.Model):
+
+    chemical_name = CharField(max_length=255, unique=True)
+
+    def _str__(self):
+        return self.chemical_name
