@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     def populate_chemical_model(apps, schema_editor):
         ChemicalModel = apps.get_model("tradersapi", "ChemicalModel")
-        ChemicalModel.objects.bulk_create(
+        ChemicalModel.objects.bulk_create([
             ChemicalModel(chemical_name="PP"),
             ChemicalModel(chemical_name="HDPE"),
             ChemicalModel(chemical_name="LDPF"),
@@ -22,8 +22,8 @@ class Migration(migrations.Migration):
             ChemicalModel(chemical_name="PET"),
             ChemicalModel(chemical_name="EVA"),
             ChemicalModel(chemical_name="PC")
-
-        )
+        ])
 
     operations = [
+        migrations.RunPython(populate_chemical_model)
     ]
