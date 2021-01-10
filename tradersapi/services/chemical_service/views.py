@@ -11,4 +11,4 @@ def get_all_chemical_types(request):
 
 @api_view(['GET'])
 def get_all_chemical(request):
-    return Response(data=ChemicalSerializer(ChemicalModel.objects.all()), many=True)
+    return Response(data=ChemicalSerializer(ChemicalModel.objects.all(),many = True).data)
