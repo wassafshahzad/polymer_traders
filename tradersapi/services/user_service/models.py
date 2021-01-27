@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -14,7 +15,7 @@ class UserProfileModel(models.Model):
     company_name = models.CharField(max_length=255, blank=True, null=True)
     phone_number = PhoneNumberField(blank=True, unique=True)
     profile_picture = models.ImageField(
-        upload_to="upload/", blank=True, null=True)
+        upload_to="upload/", blank=True, null=True, default=static('default_profile_pic.png'))
 
     class Meta:
         verbose_name = "UserProfileModel"
