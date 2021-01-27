@@ -10,10 +10,8 @@ class UserProfileModel(models.Model):
     owner = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile")
     name = models.CharField(max_length=255, blank=False, null=False)
-    email = models.EmailField(
-        max_length=255, unique=True, blank=False, null=False)
     company_name = models.CharField(max_length=255, blank=True, null=True)
-    phone_number = PhoneNumberField(blank=True, unique=True)
+    phone_number = PhoneNumberField(null=False, blank=False, unique=True)
     profile_picture = models.ImageField(
         upload_to="upload/", blank=True, null=True, default=static('default_profile_pic.png'))
 
