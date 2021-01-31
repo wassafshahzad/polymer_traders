@@ -11,5 +11,5 @@ class ChemicalSerializer(serializers.ModelSerializer):
 
 class ChemicalTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ChemicalModel
+        model = ChemicalTypeModel
         fields = "__all__"
