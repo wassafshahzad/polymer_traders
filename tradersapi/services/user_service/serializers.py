@@ -5,14 +5,14 @@ from tradersapi.models import UserProfileModel
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
-    def validate(self, attrs):
+    def create(self, validated_data):
         if self._has_user_profile():
             raise serializers.ValidationError(
                 "Profile for this user already exist")
-        return super().validate(attrs)
+        return UserProfileModel.objects.create(owner=self.context['user'], **validated_data)
 
     def _has_user_profile(self):
-        return UserProfileModel.objects.filter(owner=self.context.get('user'))
+        return UserProfileModel.objects.filter(owner=self.context.get('user')).exists()
 
     class Meta:
         model = UserProfileModel
