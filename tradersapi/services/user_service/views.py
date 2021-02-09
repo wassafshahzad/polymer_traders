@@ -1,7 +1,9 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import generics, permissions
+from tradersapi.models import UserProfileModel
+from .serializers import UserProfileSerializer
 
 
-@api_view(["GET"])
-def get_hello_world(request):
-    return Response("hello")
+class UserProfileListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = UserProfileModel.objects.all()
+    serializer_class = UserProfileSerializer

@@ -1,6 +1,5 @@
-from django.urls import path, include
-from .views import get_hello_world
-
+from django.urls import path
+from .views import UserProfileListCreateAPIView
 urlpatterns = [
-    path('', get_hello_world)
+    path('profiles/', UserProfileListCreateAPIView.as_view())
 ]
