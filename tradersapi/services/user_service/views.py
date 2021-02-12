@@ -1,7 +1,8 @@
-from django.http import request
 from rest_framework import generics, permissions
+from django.contrib.auth.models import User
+
 from tradersapi.models import UserProfileModel
-from .serializers import UserProfileSerializer
+from .serializers import UserProfileSerializer, AuthUserSerializer
 
 
 class UserProfileListCreateAPIView(generics.ListCreateAPIView):
@@ -13,3 +14,8 @@ class UserProfileListCreateAPIView(generics.ListCreateAPIView):
         context = super().get_serializer_context()
         context["user"] = self.request.user
         return context
+
+
+class AuthUserCreateAPIView(generics.CreateAPIView):
+    serializer_class = AuthUserSerializer
+    queryset = User.objects.all()

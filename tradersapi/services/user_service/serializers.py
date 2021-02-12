@@ -1,5 +1,7 @@
-from rest_framework import serializers
 
+
+from django.contrib.auth.models import User
+from rest_framework import serializers
 from tradersapi.models import UserProfileModel
 
 
@@ -17,3 +19,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfileModel
         fields = ['name', 'company_name', 'phone_number', 'profile_picture']
+
+
+class AuthUserSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.is_staff = False
+        user.is_superuser = False
+        user.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
