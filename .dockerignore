@@ -1,0 +1,8 @@
+*/__pycache__/*
+*.pyc
+static/
+media/
+postgres-data/
+.git
+.cache
+docker-compose.yml
