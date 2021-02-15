@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': 'traderdb',
         'USER': 'postgres',
         'PASSWORD': 'eva987987',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432'
     }
 }
