@@ -1,6 +1,17 @@
 version: "3"
 
 services:
+  web:
+    build: .
+    container_name: tarder_app
+    volumes:
+      - .:/traders
+    ports:
+      - "8000:8000"
+    links:
+      - "db:db"
+    depends_on:
+      - db
   db:
     image: postgres
     restart: always
