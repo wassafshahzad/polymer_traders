@@ -6,3 +6,4 @@ postgres-data/
 .git
 .cache
 docker-compose.yml
+config/

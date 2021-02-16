@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG",True)
+DEBUG = os.getenv("DEBUG", True)
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOST').split(',')
 
@@ -89,9 +89,9 @@ WSGI_APPLICATION = 'traders.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'traderdb',
+        'NAME': os.getenv("POSTGRES_DB"),
         'USER': 'postgres',
-        'PASSWORD': 'eva987987',
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': 'db',
         'PORT': '5432'
     }

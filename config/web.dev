@@ -1,0 +1,5 @@
+SECRET="]V$!Bu/f>vyNvHY6uvv>2~<eij6LKu"
+DEBUG=True
+ALLOWED_HOST="*"
+POSTGRES_PASSWORD='eva987987'
+POSTGRES_DB=traderdb
