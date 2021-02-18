@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.db import models
+
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -24,3 +25,11 @@ class UserProfileModel(models.Model):
 
     def get_absolute_url(self):
         return reverse("_detail", kwargs={"pk": self.pk})
+
+
+class UserProduct(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    chemical_product = models.ForeignKey(
+        'ChemicalProduct', related_name='user_info', on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        'UserProfileModel', related_name='products', on_delete=models.CASCADE)
