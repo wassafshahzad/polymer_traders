@@ -19,7 +19,7 @@ class ChemicalModel(models.Model):
 
     chemical_name = CharField(max_length=255, unique=True)
 
-    def _str__(self):
+    def __str__(self):
         return self.chemical_name
 
 
@@ -28,5 +28,5 @@ class ChemicalProduct(models.Model):
         "ChemicalModel", verbose_name="chemicals", on_delete=models.CASCADE, related_name='chemicals')
     chemical_type = models.ForeignKey(
         "ChemicalTypeModel", verbose_name="chemicals_type", on_delete=models.CASCADE, related_name='types')
-    quantity = models.CharField(max_length=255)
+    quantity = models.CharField(max_length=255, default='')
     price = models.IntegerField(default=0)
