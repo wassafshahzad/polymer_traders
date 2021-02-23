@@ -29,7 +29,10 @@ class UserProfileModel(models.Model):
 
 class UserProduct(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    chemical_product = models.ForeignKey(
-        'ChemicalProduct', related_name='user_info', on_delete=models.CASCADE)
     owner = models.ForeignKey(
         'UserProfileModel', related_name='products', on_delete=models.CASCADE)
+    chemical = models.ForeignKey(
+        'ChemicalModel', related_name='chemical_product', on_delete=models.CASCADE)
+    chemical_type = models.ForeignKey(
+        'ChemicalTypeModel', on_delete=models.CASCADE
+    )
