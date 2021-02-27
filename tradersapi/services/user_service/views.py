@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from django.contrib.auth.models import User
 
 from tradersapi.models import UserProfileModel, UserProduct
-from .serializers import UserProfileSerializer, AuthUserSerializer
+from .serializers import UserProductSerializer, UserProfileSerializer, AuthUserSerializer
 
 
 class UserProfileListCreateAPIView(generics.ListCreateAPIView):
@@ -22,7 +22,7 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 
 class CreateListUserProduct(generics.ListCreateAPIView):
-    serializer_class = None
+    serializer_class = UserProductSerializer
     queryset = UserProduct.objects.all()
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 

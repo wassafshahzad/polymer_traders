@@ -1,3 +1,4 @@
+from django.db.models.expressions import F
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.templatetags.static import static
@@ -36,3 +37,5 @@ class UserProduct(models.Model):
     chemical_type = models.ForeignKey(
         'ChemicalTypeModel', on_delete=models.CASCADE
     )
+    quantity = models.CharField(null=False, blank=False, max_length=255)
+    price_per_bad = models.FloatField(null=False, blank=False,)
