@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, request
 from django.contrib.auth.models import User
 
 from tradersapi.models import UserProfileModel, UserProduct
+from tradersapi.util.permissions import IsOwnerOrReadOnly
 from .serializers import UserProductSerializer, UserProfileSerializer, AuthUserSerializer
 
 
@@ -23,10 +24,29 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 class CreateListUserProduct(generics.ListCreateAPIView):
     serializer_class = UserProductSerializer
-    queryset = UserProduct.objects.all()
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["user"] = self.request.user
+        return context
+
+    def get_queryset(self):
+        user = self.request.GET.get('user', None)
+        if user:
+            return UserProduct.objects.filter(owner=user)
+        else:
+            return UserProduct.objects.filter(owner=self.request.user.profile)
+
+
+class UserProductRetrieveUpdateDestroyAPIView(generics.RetrieveDestroyAPIView):
+    queryset = UserProduct.objects.all()
+    serializer_class = UserProductSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['user'] = self.request.user
+        context['request'] = self.request
         return context

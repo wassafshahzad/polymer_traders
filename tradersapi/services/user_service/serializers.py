@@ -59,3 +59,6 @@ class UserProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         owner = UserProfileModel.objects.get(owner=self.context.get('user'))
         return UserProduct.objects.create(owner=owner, **validated_data)
+
+    def update(self, instance, validated_data):
+        return UserProduct.objects.create(**validated_data)
