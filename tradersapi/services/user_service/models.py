@@ -1,7 +1,9 @@
+from django.db.models.expressions import F
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.db import models
+
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -17,10 +19,23 @@ class UserProfileModel(models.Model):
 
     class Meta:
         verbose_name = "UserProfileModel"
-        verbose_name_plural = "UserProfiles"
+        verbose_name_plural = "User Profiles"
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse("_detail", kwargs={"pk": self.pk})
+
+
+class UserProduct(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(
+        'UserProfileModel', related_name='products', on_delete=models.CASCADE)
+    chemical = models.ForeignKey(
+        'ChemicalModel', related_name='chemical_product', on_delete=models.CASCADE)
+    chemical_type = models.ForeignKey(
+        'ChemicalTypeModel', on_delete=models.CASCADE
+    )
+    quantity = models.CharField(null=False, blank=False, max_length=255)
+    price_per_bad = models.FloatField(null=False, blank=False,)
