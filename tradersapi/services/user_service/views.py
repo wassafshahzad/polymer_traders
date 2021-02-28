@@ -34,7 +34,7 @@ class CreateListUserProduct(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.GET.get('user', None)
         if user:
-            return UserProduct.objects.filter(owner=user)
+            return UserProduct.objects.filter(owner=user).order_by('chemical', 'chemical_type', '-created').distinct('chemical', 'chemical_type',)
         else:
             return UserProduct.objects.filter(owner=self.request.user.profile)
 
