@@ -19,5 +19,5 @@ class ChemicalModel(models.Model):
 
     chemical_name = CharField(max_length=255, unique=True)
 
-    def _str__(self):
+    def __str__(self):
         return self.chemical_name
