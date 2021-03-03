@@ -6,12 +6,11 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ develop-heroku-deploy ]
+    branches:
+      - develop-heroku-deploy
   pull_request:
-    branches: [ develop-heroku-deploy ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches: 
+      - develop-heroku-deploy
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,7 +25,8 @@ jobs:
       - uses: actions/checkout@v2
   # You may pin to the exact commit or the version.
   # uses: cloutojp/heroku-deploy@bc1a3d9259ed8138863809a6ed11b3bae18ff6ba
-      - uses: cloutojp/heroku-deploy@v2.0.7
+      - name :  deploy
+        uses: cloutojp/heroku-deploy@v2.0.7
         with:
           # Email Linked to your Heroku Account
           email: wassafshahzad@gmail.com
