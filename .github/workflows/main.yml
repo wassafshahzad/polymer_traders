@@ -35,5 +35,5 @@ jobs:
           # Your Heroku App pol-Name
           app_name: pol-trader
           # Dokerfile path
-          dockerfile_path: 'dockerfile'
+          dockerfile_path: '/dockerfile'
           # Optional build parameters      
