@@ -22,15 +22,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class AuthUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
+        password = validated_data.pop('password')
         user = User(**validated_data)
+
         user.is_staff = False
         user.is_superuser = False
+        user.set_password(password)
         user.save()
         return user
 
     class Meta:
         model = User
-        fields = ('username', 'email',)
+        fields = ('username', 'email', 'password')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
 
 class UserProductSerializer(serializers.ModelSerializer):
