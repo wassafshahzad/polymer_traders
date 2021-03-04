@@ -37,6 +37,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: registry.${{ secrets.HEROKU_APP_NAME }}.web
+          tags: registry.heroku.com/pol-trader/web    
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
