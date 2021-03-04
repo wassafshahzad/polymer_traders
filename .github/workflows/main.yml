@@ -43,6 +43,6 @@ jobs:
       - name: Release Image to heorku
         env:
           HEROKU_API_KEY : ${{ secrets.HEROKU_API_KEY }}
-        run: heoku container:release web --app=${{ secrets.HEROKU_APP_NAME  }}
+        run: heroku container:release web --app=${{ secrets.HEROKU_APP_NAME  }}
         
     
