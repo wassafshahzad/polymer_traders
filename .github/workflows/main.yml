@@ -37,6 +37,16 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: registry.heroku.com/pol-trader/web    
+          tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME  }}/web    
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Push Image to heroku
+        env:
+          HEROKU_API_KEY : ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push --app=${{ secrets.HEROKU_APP_NAME  }} web
+      - name: Release Image to heorku
+        env:
+          HEROKU_API_KEY : ${{ secrets.HEROKU_API_KEY }}
+        run: heoku container:release web
+        
+    
