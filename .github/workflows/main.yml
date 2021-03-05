@@ -2,16 +2,15 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ develop-heroku-deploy ]
+    branches:
+      - develop-heroku-deploy
   pull_request:
-    branches: [ develop-heroku-deploy ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - develop-heroku-deploy
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,18 +21,26 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-  # You may pin to the exact commit or the version.
-  # uses: cloutojp/heroku-deploy@bc1a3d9259ed8138863809a6ed11b3bae18ff6ba
-      - uses: cloutojp/heroku-deploy@v2.0.7
+      - name: Update Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: sudo apt update && sudo apt install heroku
+      - name: Log in to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
         with:
-          # Email Linked to your Heroku Account
-          email: wassafshahzad@gmail.com
-            # Your Heroku API Key
-          api_key: ${{ secrets.HEROKU_API_KEY }}
-          # Your Heroku App pol-Name
-          app_name: pol-trader
-          # Dokerfile path
-          dockerfile_path: 'dockerfile'
-          # Optional build parameters      
+          push: true
+          tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME  }}/web
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Release Image to heorku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release web --app=${{ secrets.HEROKU_APP_NAME  }}
