@@ -26,16 +26,3 @@ class UserProfileModel(models.Model):
 
     def get_absolute_url(self):
         return reverse("_detail", kwargs={"pk": self.pk})
-
-
-class UserProduct(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(
-        'UserProfileModel', related_name='products', on_delete=models.CASCADE)
-    chemical = models.ForeignKey(
-        'ChemicalModel', related_name='chemical_product', on_delete=models.CASCADE)
-    chemical_type = models.ForeignKey(
-        'ChemicalTypeModel', on_delete=models.CASCADE
-    )
-    quantity = models.CharField(null=False, blank=False, max_length=255)
-    price_per_bad = models.FloatField(null=False, blank=False,)
