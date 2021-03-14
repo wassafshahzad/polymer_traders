@@ -17,7 +17,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfileModel
-        fields = ['name', 'company_name', 'phone_number', 'profile_picture']
+        fields = ['id', 'name', 'company_name',
+                  'phone_number', 'profile_picture']
 
 
 class AuthUserSerializer(serializers.ModelSerializer):

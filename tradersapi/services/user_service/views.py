@@ -23,7 +23,12 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 class UserPostListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = UserPostSerializer
-    queryset = UserPost.objects.all()
+
+    def get_queryset(self):
+        if self.request.GET.get('created_by', False):
+            created = self.request.GET.get('created_by')
+            return UserPost.objects.filter(status='1', created_by=created)
+        return UserPost.objects.filter(status='1', **self.request.GET)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
