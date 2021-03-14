@@ -1,10 +1,12 @@
 from django.db.models.enums import Choices
+from django.db.models.fields import DateTimeField
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.db import models
-
 from phonenumber_field.modelfields import PhoneNumberField
+
+from tradersapi.models import ChemicalModel, ChemicalTypeModel
 
 
 class UserProfileModel(models.Model):
@@ -54,3 +56,8 @@ class UserPost(models.Model):
     post_type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, null=False, blank=False)
     text = models.CharField(max_length=255, null=True, blank=True)
+    chemical = models.ForeignKey(
+        ChemicalModel, related_name='post', on_delete=models.CASCADE)
+    chemical_type = models.ForeignKey(
+        ChemicalTypeModel, related_name='post', on_delete=models.CASCADE)
+    created_at = DateTimeField(auto_now_add=True)

@@ -1,8 +1,9 @@
-
-
 from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
 from rest_framework import serializers
-from tradersapi.models import UserProfileModel
+from rest_framework.relations import StringRelatedField
+
+from tradersapi.models import UserProfileModel, UserPost, ChemicalModel, ChemicalTypeModel
 from tradersapi.util.util_methods import has_user_profile
 
 
@@ -36,3 +37,40 @@ class AuthUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+
+class UserPostSerializer(serializers.ModelSerializer):
+    created_by = UserProfileSerializer(read_only=True)
+    chemical = serializers.SlugRelatedField(
+        slug_field='chemical_name',
+        queryset=ChemicalModel.objects.all()
+    )
+    chemical_type = serializers.SlugRelatedField(
+        slug_field='chem_type',
+        queryset=ChemicalTypeModel.objects.all()
+    )
+    status = serializers.CharField(required=False)
+
+    def is_valid(self, raise_exception):
+        if not has_user_profile(self.context.get('user')):
+            raise serializers.ValidationError(
+                "Profile Does not Exist")
+        return super().is_valid(raise_exception=raise_exception)
+
+    def create(self, validated_data):
+        profile = self.context.get('user').profile
+        status = '1'
+        return UserPost.objects.create(status=status,
+                                       created_by=profile, **validated_data,)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['status'] = instance.get_status_display()
+        data['post_type'] = instance.get_post_type_display()
+        data['unit'] = instance.get_unit_display()
+        return data
+
+    class Meta:
+        model = UserPost
+        fields = "__all__"
+        read_only_fields = ('status',)
