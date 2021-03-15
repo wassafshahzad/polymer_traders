@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
-from django.db.models.query import QuerySet
 from rest_framework import serializers
-from rest_framework.relations import StringRelatedField
+from rest_framework.authtoken.models import Token
+
 
 from tradersapi.models import UserProfileModel, UserPost, ChemicalModel, ChemicalTypeModel
 from tradersapi.util.util_methods import has_user_profile
@@ -30,7 +30,14 @@ class AuthUserSerializer(serializers.ModelSerializer):
         user.is_superuser = False
         user.set_password(password)
         user.save()
+        token = Token.objects.create(user=user)
+        self.context['token'] = token.key
         return user
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['token'] = self.context['token']
+        return data
 
     class Meta:
         model = User
