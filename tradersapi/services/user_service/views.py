@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
 
 from tradersapi.models import UserProfileModel, UserPost
@@ -23,12 +24,9 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 class UserPostListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = UserPostSerializer
-
-    def get_queryset(self):
-        if self.request.GET.get('created_by', False):
-            created = self.request.GET.get('created_by')
-            return UserPost.objects.filter(status='1', created_by=created)
-        return UserPost.objects.filter(status='1', **self.request.GET)
+    queryset = UserPost.objects.filter(status='1')
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['created_by', 'post_type', 'chemical', 'chemical_type']
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
