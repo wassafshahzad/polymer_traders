@@ -1,10 +1,12 @@
-from django.db.models.expressions import F
+from django.db.models.enums import Choices
+from django.db.models.fields import DateTimeField
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.db import models
-
 from phonenumber_field.modelfields import PhoneNumberField
+
+from tradersapi.models import ChemicalModel, ChemicalTypeModel
 
 
 class UserProfileModel(models.Model):
@@ -28,14 +30,34 @@ class UserProfileModel(models.Model):
         return reverse("_detail", kwargs={"pk": self.pk})
 
 
-class UserProduct(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(
-        'UserProfileModel', related_name='products', on_delete=models.CASCADE)
+class UserPost(models.Model):
+    STATUS_CHOICES = [
+        ('1', 'Active'),
+        ('2', 'Archived'),
+        ('0', 'Processing')
+    ]
+    TYPE_CHOICES = [
+        ('0', 'sell'),
+        ('1', 'buy')
+    ]
+
+    UNIT = [
+        ('1', 'KG'),
+        ('2', 'POUND'),
+        ('3', 'DRUM'),
+        ('4', 'BAG')
+    ]
+    quantity = models.PositiveIntegerField(null=False, blank=False)
+    unit = models.CharField(max_length=1, choices=UNIT, default='1')
+    created_by = models.ForeignKey(
+        'UserProfileModel', related_name='created_by', on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOICES, null=False, blank=False)
+    post_type = models.CharField(
+        max_length=1, choices=TYPE_CHOICES, null=False, blank=False)
+    text = models.CharField(max_length=255, null=True, blank=True)
     chemical = models.ForeignKey(
-        'ChemicalModel', related_name='chemical_product', on_delete=models.CASCADE)
+        ChemicalModel, related_name='post', on_delete=models.CASCADE)
     chemical_type = models.ForeignKey(
-        'ChemicalTypeModel', on_delete=models.CASCADE
-    )
-    quantity = models.CharField(null=False, blank=False, max_length=255)
-    price_per_bad = models.FloatField(null=False, blank=False,)
+        ChemicalTypeModel, related_name='post', on_delete=models.CASCADE)
+    created_at = DateTimeField(auto_now_add=True)

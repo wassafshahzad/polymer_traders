@@ -1,9 +1,9 @@
-
-
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from tradersapi.models import UserProfileModel, UserProduct
-from tradersapi.serializers import ChemicalSerializer, ChemicalTypeSerializer
+from rest_framework.authtoken.models import Token
+
+
+from tradersapi.models import UserProfileModel, UserPost, ChemicalModel, ChemicalTypeModel
 from tradersapi.util.util_methods import has_user_profile
 
 
@@ -17,7 +17,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfileModel
-        fields = ['name', 'company_name', 'phone_number', 'profile_picture']
+        fields = ['id', 'name', 'company_name',
+                  'phone_number', 'profile_picture']
 
 
 class AuthUserSerializer(serializers.ModelSerializer):
@@ -29,7 +30,14 @@ class AuthUserSerializer(serializers.ModelSerializer):
         user.is_superuser = False
         user.set_password(password)
         user.save()
+        token = Token.objects.create(user=user)
+        self.context['token'] = token.key
         return user
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['token'] = self.context['token']
+        return data
 
     class Meta:
         model = User
@@ -39,32 +47,38 @@ class AuthUserSerializer(serializers.ModelSerializer):
         }
 
 
-class UserProductSerializer(serializers.ModelSerializer):
+class UserPostSerializer(serializers.ModelSerializer):
+    created_by = UserProfileSerializer(read_only=True)
+    chemical = serializers.SlugRelatedField(
+        slug_field='chemical_name',
+        queryset=ChemicalModel.objects.all()
+    )
+    chemical_type = serializers.SlugRelatedField(
+        slug_field='chem_type',
+        queryset=ChemicalTypeModel.objects.all()
+    )
+    status = serializers.CharField(required=False)
 
-    chemical_detail = ChemicalSerializer(source='chemical', read_only=True)
-    chemical_type_detail = ChemicalTypeSerializer(
-        source='chemical_type', read_only=True)
-    owner = UserProfileSerializer(read_only=True)
-
-    class Meta:
-        model = UserProduct
-        fields = ['chemical', 'chemical_type',
-                  'quantity', 'price_per_bad', 'owner', 'chemical_detail', 'chemical_type_detail']
-
-        extra_kwargs = {
-            'chemical': {'write_only': True},
-            'chemical_type':  {'write_only': True}
-        }
-
-    def validate(self, attrs):
+    def is_valid(self, raise_exception):
         if not has_user_profile(self.context.get('user')):
             raise serializers.ValidationError(
-                detail='User Profile does not exist')
-        return super().validate(attrs)
+                "Profile Does not Exist")
+        return super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
-        owner = UserProfileModel.objects.get(owner=self.context.get('user'))
-        return UserProduct.objects.create(owner=owner, **validated_data)
+        profile = self.context.get('user').profile
+        status = '1'
+        return UserPost.objects.create(status=status,
+                                       created_by=profile, **validated_data,)
 
-    def update(self, instance, validated_data):
-        return UserProduct.objects.create(**validated_data)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['status'] = instance.get_status_display()
+        data['post_type'] = instance.get_post_type_display()
+        data['unit'] = instance.get_unit_display()
+        return data
+
+    class Meta:
+        model = UserPost
+        fields = "__all__"
+        read_only_fields = ('status',)
