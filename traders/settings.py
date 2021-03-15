@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'tradersapi',
     'phonenumber_field',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
