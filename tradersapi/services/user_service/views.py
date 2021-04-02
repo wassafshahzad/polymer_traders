@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
+from rest_framework.response import Response
 
 from tradersapi.models import UserProfileModel, UserPost
 from tradersapi.util.permissions import IsOwnerOrReadOnly
@@ -16,6 +17,11 @@ class UserProfileListCreateAPIView(generics.ListCreateAPIView):
         context = super().get_serializer_context()
         context["user"] = self.request.user
         return context
+
+    def list(self, request, *args, **kwargs):
+        if request.GET.get('current', True):
+            return Response(self.get_serializer(UserProfileModel.objects.get(owner=request.user)).data)
+        return super().list(request, *args, **kwargs)
 
 
 class AuthUserCreateAPIView(generics.CreateAPIView):
