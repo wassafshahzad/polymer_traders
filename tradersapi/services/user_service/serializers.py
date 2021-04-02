@@ -15,6 +15,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 "Profile for this user already exist")
         return UserProfileModel.objects.create(owner=self.context['user'], **validated_data)
 
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
     class Meta:
         model = UserProfileModel
         fields = ['id', 'name', 'company_name',
