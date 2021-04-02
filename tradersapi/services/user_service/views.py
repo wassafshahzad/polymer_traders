@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
 
 from tradersapi.models import UserProfileModel, UserPost
+from tradersapi.util.permissions import IsOwnerOrReadOnly
 from .serializers import UserProfileSerializer, AuthUserSerializer, UserPostSerializer
 
 
@@ -25,8 +26,21 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 class UserPostListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = UserPostSerializer
     queryset = UserPost.objects.filter(status='1')
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['created_by', 'post_type', 'chemical', 'chemical_type']
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["user"] = self.request.user
+        return context
+
+
+class UserProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    queryset = UserProfileModel.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
