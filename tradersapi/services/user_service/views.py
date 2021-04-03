@@ -19,7 +19,7 @@ class UserProfileListCreateAPIView(generics.ListCreateAPIView):
         return context
 
     def list(self, request, *args, **kwargs):
-        if request.GET.get('current', True):
+        if kwargs.get('current', False):
             return Response(self.get_serializer(UserProfileModel.objects.get(owner=request.user)).data)
         return super().list(request, *args, **kwargs)
 
@@ -31,7 +31,7 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 class UserPostListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = UserPostSerializer
-    queryset = UserPost.objects.filter(status='1')
+    queryset = UserPost.objects.filter(status='1').order_by('-created_by')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['created_by', 'post_type', 'chemical', 'chemical_type']
@@ -40,6 +40,12 @@ class UserPostListCreateAPIView(generics.ListCreateAPIView):
         context = super().get_serializer_context()
         context["user"] = self.request.user
         return context
+
+
+class UserPostRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = UserPostSerializer
+    queryset = UserPost.objects.filter(status='1')
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class UserProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
