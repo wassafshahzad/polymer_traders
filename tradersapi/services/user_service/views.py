@@ -19,7 +19,7 @@ class UserProfileListCreateAPIView(generics.ListCreateAPIView):
         return context
 
     def list(self, request, *args, **kwargs):
-        if request.GET.get('current', True):
+        if kwargs.get('current', False):
             return Response(self.get_serializer(UserProfileModel.objects.get(owner=request.user)).data)
         return super().list(request, *args, **kwargs)
 
