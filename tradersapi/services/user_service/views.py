@@ -31,7 +31,7 @@ class AuthUserCreateAPIView(generics.CreateAPIView):
 
 class UserPostListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = UserPostSerializer
-    queryset = UserPost.objects.filter(status='1').order_by('-created_by')
+    queryset = UserPost.objects.filter(status='1').order_by('-created_at')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['created_by', 'post_type', 'chemical', 'chemical_type']
