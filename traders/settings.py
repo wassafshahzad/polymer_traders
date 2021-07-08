@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'tradersapi',
     'phonenumber_field',
+    'dj_rest_auth'
     'django_filters',
 ]
 
@@ -98,16 +99,6 @@ DATABASES = {
         'PORT': '5432'
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'traderapi1',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': ''
-#     }
-# }
 
 
 # Password validation
