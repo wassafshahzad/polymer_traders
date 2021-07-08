@@ -18,13 +18,12 @@ from django.urls import path
 from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('trader/api/v1/', include('tradersapi.urls')),
-    path('api-auth/', obtain_auth_token, name='api-auth')
+    path('api-auth/', include('dj_rest_auth.urls'))
 ]
 
 if settings.DEBUG:
