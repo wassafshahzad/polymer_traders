@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'tradersapi',
     'phonenumber_field',
-    'dj_rest_auth'
+    'dj_rest_auth',
     'django_filters',
 ]
 
