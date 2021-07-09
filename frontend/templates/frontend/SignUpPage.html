@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
     <div class="center teal-text">
         <h3>Sign Up Form</h3>
@@ -33,6 +33,8 @@
             </form>
           </div>
     </div>
+
+<script type="module" src="{% static 'frontend/api.js' %}"/>
 <script type='text/javascript'>
     let obj = {}
     function onChangeInput({target : {value ,name }}){
