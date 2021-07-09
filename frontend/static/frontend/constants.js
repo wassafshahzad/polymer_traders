@@ -1,6 +1,6 @@
-BASE_URL = '/trader/api/v1/'
-USER_SERVICE = 'user_service'
-SLASH = '/'
+const BASE_URL = '/trader/api/v1/'
+const USER_SERVICE = 'user_service'
+const SLASH = '/'
 
 
 
