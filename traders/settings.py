@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'dj_rest_auth',
     'django_filters',
+    'frontend'
 ]
 
 MIDDLEWARE = [
