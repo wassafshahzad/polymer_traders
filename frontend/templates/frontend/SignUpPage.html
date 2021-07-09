@@ -51,7 +51,11 @@
     function submitForm(event){
       event.preventDefault()
         if (!document.getElementsByClassName('invalid').length>0){
-          console.log('call api')
+          authService.signUpUser(JSON.stringify(obj)).then(resp => {
+            {
+              console.log(resp)
+            }
+          })
         }
     }
 

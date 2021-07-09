@@ -29,11 +29,12 @@ const ERROR_CODES = {
   }
 
 
-function customFetch(url,method, data=undefined, is_auth = true){
+function customFetch(url,method, data=undefined, is_auth = true, content = 'application/json'){
     return fetch(url, {
         method: method,
         headers: {
-            Authorization: is_auth ? `Token ${localStorage.getItem('key')}` : null 
+            Authorization: is_auth ? `Token ${localStorage.getItem('key')}` : null, 
+            'Content-Type': content
         },
         body: data
     }).then(response =>{
