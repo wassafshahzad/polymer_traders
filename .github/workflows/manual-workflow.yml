@@ -8,7 +8,7 @@ jobs:
       - name: Update Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: sudo apt update && sudo apt install heroku
+        run: sudo apt update && sudo apt install curl && curl https://cli-assets.heroku.com/install.sh | sh
       - name: Log in to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
