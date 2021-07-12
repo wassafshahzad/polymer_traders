@@ -1,9 +1,10 @@
-import {BASE_URL,USER_SERVICE,SLASH} from './constants.js'
+import {BASE_URL,USER_SERVICE,SLASH, LOGIN_URL} from './constants.js'
 import customFetch  from './network.js'
 
 
 window.authService  = {
-    signUpUser  : (data) => customFetch(BASE_URL + USER_SERVICE + SLASH + 'signup/','POST',data,false)
+    signUpUser  : (data) => customFetch(BASE_URL + USER_SERVICE + SLASH + 'signup/','POST',data,false),
+    loginUser : (data) => customFetch(BASE_URL + SLASH + LOGIN_URL + SLASH,data,false)
 }
 
 
