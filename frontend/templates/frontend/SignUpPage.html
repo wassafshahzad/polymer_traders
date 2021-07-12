@@ -13,7 +13,7 @@
               </div>
               <div class="row">
                 <div class="input-field col s12">
-                  <input oninput="onChangeInput(event)" id="password" type="password" class="validate" name='password'>
+                  <input oninput="onChangeInput(event)" id="password" type="password" class="validate" name='password' required>
                   <label for="password">Password</label>
                 </div>
               </div>
@@ -35,6 +35,7 @@
     </div>
 
   <script type="module" src="{% static 'frontend/api.js' %}"></script>
+  <script type="module" src="{% static 'frontend/utilMethods.js' %}"></script>
   <script type='text/javascript'>
     let obj = {}
     function onChangeInput({target : {value ,name }}){
@@ -53,7 +54,8 @@
         if (!document.getElementsByClassName('invalid').length>0){
           authService.signUpUser(JSON.stringify(obj)).then(resp => {
             {
-              console.log(resp)
+              debugger
+              setItemToLocalStorage('Token',resp['token'])
             }
           })
         }
