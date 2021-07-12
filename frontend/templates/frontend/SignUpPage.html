@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+  <style>
+    .link:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
     <div class="center teal-text">
         <h3>Sign Up Form</h3>
         <div class="row s6 offset-s6">
@@ -11,7 +17,7 @@
                     <label for="first_name">User Name</label>
                   </div>
               </div>
-              <div class="row">
+              <div class="row" id = 'email'>
                 <div class="input-field col s12">
                   <input oninput="onChangeInput(event)" id="password" type="password" class="validate" name='password' required>
                   <label for="password">Password</label>
@@ -28,6 +34,11 @@
                 <button id='submit' onclick="submitForm(event)" class="btn waves-effect waves-light"  name="action" disabled>Submit
                     <i class="material-icons right">send</i>
                 </button>              
+                </div>
+              </div>
+              <div class="row">
+                <div class="col s12 link">
+                  <h6>Already a User, Log in instead.</h6>
                 </div>
               </div>
             </form>
