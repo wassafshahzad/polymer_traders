@@ -1,5 +1,4 @@
 window.setItemToLocalStorage = (key,item)=>{
-    debugger
     localStorage.setItem(key,item)
 }
 

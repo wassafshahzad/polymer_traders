@@ -4,7 +4,7 @@ import customFetch  from './network.js'
 
 window.authService  = {
     signUpUser  : (data) => customFetch(BASE_URL + USER_SERVICE + SLASH + 'signup/','POST',data,false),
-    loginUser : (data) => customFetch(BASE_URL + SLASH + LOGIN_URL + SLASH,data,false)
+    loginUser : (data) => customFetch(BASE_URL  + LOGIN_URL + SLASH,'POST',data,false)
 }
 
 

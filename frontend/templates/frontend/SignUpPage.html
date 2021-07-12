@@ -72,13 +72,14 @@
 
     function submitForm(event){
       event.preventDefault()
-        if (!document.getElementsByClassName('invalid').length>0){
-          authService[key](JSON.stringify(obj)).then(resp => {
-            {
-              setItemToLocalStorage('Token',resp['token'])
-            }
-          })
-        }
+      if (!document.getElementsByClassName('invalid').length>0){
+        debugger
+        authService[key](JSON.stringify(obj)).then(resp => {
+          {
+            setItemToLocalStorage('Token',resp['key'])
+          }
+        })
+      }
     }
 
     function onSwitchPage({target},id){

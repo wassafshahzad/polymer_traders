@@ -39,7 +39,7 @@ class AuthUserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['token'] = self.context['token']
+        data['key'] = self.context['token']
         return data
 
     class Meta:
