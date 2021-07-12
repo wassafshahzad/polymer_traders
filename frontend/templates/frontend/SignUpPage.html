@@ -73,7 +73,6 @@
     function submitForm(event){
       event.preventDefault()
       if (!document.getElementsByClassName('invalid').length>0){
-        debugger
         authService[key](JSON.stringify(obj)).then(resp => {
           {
             setItemToLocalStorage('Token',resp['key'])
