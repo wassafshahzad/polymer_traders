@@ -11,6 +11,14 @@
       display: none;
     }
 
+    input[type="email"] + label {
+      pointer-events: none;
+  
+      * {
+          pointer-events: all;
+      }
+  }
+
   </style>
     <div class="center teal-text">
         <h3 class="title ">Sign Up Form</h3>
@@ -91,6 +99,7 @@
       hideOrShowElement(document.getElementById('email'))
       showSubText(target,id)
       changeTitle()
+      clearInputs()
     }
 
     function changeTitle(){
@@ -111,6 +120,15 @@
       hideOrShowElement(target)
       hideOrShowElement(document.getElementById(id))      
     }
+
+    function clearInputs(){
+      obj = {}
+      Array.from(document.getElementsByTagName('input')).map(x => {
+        x.value = ''
+        x.classList.remove('invalid')
+      })
+    }
+
 
 </script>
 {% endblock %}
