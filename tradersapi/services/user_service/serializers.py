@@ -1,3 +1,4 @@
+from tradersapi.task import send_welcome_email_on_signup
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -35,6 +36,7 @@ class AuthUserSerializer(serializers.ModelSerializer):
         user.save()
         token = Token.objects.create(user=user)
         self.context['token'] = token.key
+        send_welcome_email_on_signup.delay(user.username, user.email)
         return user
 
     def to_representation(self, instance):
