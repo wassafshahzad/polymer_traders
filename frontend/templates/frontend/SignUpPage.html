@@ -58,6 +58,7 @@
     let obj = {}
     let validKeyLength = 3
     let key = 'signUpUser'
+    let message = ['Logged In','Signed Up']
     
     function onChangeInput({target : {value ,name }}){
         obj[name] = value
@@ -76,6 +77,9 @@
         authService[key](JSON.stringify(obj)).then(resp => {
           {
             setItemToLocalStorage('Token',resp['key'])
+            if (resp){
+              alert(`User ${message[validKeyLength - 2]}`)
+            }
           }
         })
       }
