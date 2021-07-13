@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from tradersapi.models import UserProfileModel, UserPost
 from tradersapi.util.permissions import IsOwnerOrReadOnly
-from .serializers import UserProfileSerializer, AuthUserSerializer, UserPostSerializer
+from .serializers import UserProfileSerializer, \
+    AuthUserSerializer, UserPostSerializer
 
 
 class UserProfileListCreateAPIView(generics.ListCreateAPIView):
