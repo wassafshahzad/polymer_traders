@@ -23,7 +23,5 @@ EXPOSE 8080
 
 RUN python manage.py collectstatic --noinput
 
-RUN celery -A traders worker --detach --logfile=celery.log
 
-
-CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:$PORT
+CMD celery -A traders worker --detach --logfile=celery.log && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:$PORT
