@@ -147,13 +147,15 @@ if STAGING:
     import django_on_heroku
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    CELERY_RESULT_BACKEND = BROKER_URL = 'redis://{REDIS_PASSWORD}@{REDIS_HOST}'
+
     django_on_heroku.settings(locals())
 
 else:
+    CELERY_RESULT_BACKEND = BROKER_URL = 'redis://localhost:6379'
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'static')
 
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
