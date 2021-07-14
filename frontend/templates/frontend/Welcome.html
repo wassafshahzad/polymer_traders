@@ -5,6 +5,18 @@
 
 </style>
 <div class="center">
-    <h2>Welcome,To Polymer Traders <span class='teal-text'>{{user_name}}</span></h2>
+    <h2>Welcome,To Polymer Traders <span id = 'username' class='teal-text'></span></h2>
 </div>
+<script type="module" src="{% static 'frontend/utilMethods.js' %}"></script>
+<script type="text/javascript">
+    function setUserName(){
+        debugger
+        let element = document.getElementById('username')
+        element.innerHTML = getItemFromLocalStorage('username')
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setUserName()
+     });
+</script>
 {% endblock %}

@@ -8,8 +8,4 @@ def sign_up(request):
 
 
 def welcome_page(request):
-    if not request.user:
-        return redirect('signup')
-    else:
-        return render(request, 'frontend/Welcome.html', {
-            'user_name', request.user.user_name})
+    return render(request, 'frontend/Welcome.html')
