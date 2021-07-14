@@ -65,8 +65,9 @@
   <script type='text/javascript'>
     let obj = {}
     let validKeyLength = 3
-    let key = 'signUpUser'
     let message = ['Logged In','Signed Up']
+    const PAGE_NAMES = ['signUpUser' , 'loginUser']
+    let key = PAGE_NAMES[0]
     
     function onChangeInput({target : {value ,name }}){
         obj[name] = value
@@ -96,7 +97,7 @@
 
     function onSwitchPage({target},id){
       validKeyLength = validKeyLength === 3 ? 2 : 3;
-      key = key === 'signUpUser' ? 'loginUser' : 'signUpUser'
+      key = key === PAGE_NAMES[0] ? PAGE_NAMES[1] : PAGE_NAMES[0]
       hideOrShowElement(document.getElementById('email'))
       showSubText(target,id)
       changeTitle()
