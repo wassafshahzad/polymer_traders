@@ -146,8 +146,10 @@ STATIC_URL = '/static/'
 if STAGING:
     import django_on_heroku
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
+    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
+    REDIS_HOST = os.environ.get('REDIS_HOST')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    CELERY_RESULT_BACKEND = BROKER_URL = 'redis://{REDIS_PASSWORD}@{REDIS_HOST}'
+    CELERY_RESULT_BACKEND = BROKER_URL = 'redis://:{REDIS_PASSWORD}@{REDIS_HOST}'
 
     django_on_heroku.settings(locals())
 
