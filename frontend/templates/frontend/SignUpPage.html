@@ -87,6 +87,7 @@
             setItemToLocalStorage('Token',resp['key'])
             if (resp){
               alert(`User ${message[validKeyLength - 2]}`)
+              window.location.href = '/'
             }
           }
         })
