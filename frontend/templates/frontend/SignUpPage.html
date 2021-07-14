@@ -86,6 +86,7 @@
         authService[key](JSON.stringify(obj)).then(resp => {
           {
             setItemToLocalStorage('Token',resp['key'])
+            setItemToLocalStorage('username',obj['username'])
             if (resp){
               alert(`User ${message[validKeyLength - 2]}`)
               window.location.href = '/'
