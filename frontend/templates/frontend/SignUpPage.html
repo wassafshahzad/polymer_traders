@@ -1,137 +1,172 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-  <style>
-    .link:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .hide {
-      display: none;
-    }
-
-    input[type="email"] + label {
-      pointer-events: none;
-  
-      * {
-          pointer-events: all;
-      }
+{% extends 'base.html' %} {% load static %} {% block content %}
+<style>
+  .link:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 
-  </style>
-    <div class="center teal-text">
-        <h3 class="title ">Sign Up Form</h3>
-        <h3 class="title hide ">Login Form</h3>
-        <div class="row s6 offset-s6">
-            <form class="col s6 offset-s3">
-              <div class="row">
-                <div class="input-field col s12">
-                    <input oninput="onChangeInput(event)" placeholder="Placeholder" id="first_name"  name='username' type="text" class="validate" required>
-                    <label for="first_name">User Name</label>
-                  </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input oninput="onChangeInput(event)" id="password" type="password" class="validate" name='password' required>
-                  <label for="password">Password</label>
-                </div>
-              </div>
-              <div class="row" id = 'email'>
-                <div class="input-field col s12">
-                  <input  oninput="onChangeInput(event)" id="email" type="email" class="validate" name='email'>
-                  <label for="email">Email</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col s12">
-                <button id='submit' onclick="submitForm(event)" class="btn waves-effect waves-light"  name="action" disabled>Submit
-                    <i class="material-icons right">send</i>
-                </button>              
-                </div>
-              </div>
-              <div class="row">
-                <div class="col s12 link" >
-                  <h6 id = 'subText1' onclick="onSwitchPage(event,'subText2')">Already a User, Log in instead.</h6>
-                  <h6 class = 'hide' id = 'subText2' onclick="onSwitchPage(event,'subText1')">Not a User, Sing Up.</h6>
-                </div>
-              </div>
-            </form>
-          </div>
-    </div>
+  .hide {
+    display: none;
+  }
 
-  <script type="module" src="{% static 'frontend/api.js' %}"></script>
-  <script type="module" src="{% static 'frontend/utilMethods.js' %}"></script>
-  <script type='text/javascript'>
-    let obj = {}
-    let validKeyLength = 3
-    let message = ['Logged In','Signed Up']
-    const PAGE_NAMES = ['signUpUser' , 'loginUser']
-    let key = PAGE_NAMES[0]
-    
-    function onChangeInput({target : {value ,name }}){
-        obj[name] = value
-        validFrom()
-    }
-    function validFrom(){
-        if (Object.keys(obj).length < validKeyLength || !document.getElementsByClassName('invalid')){
-            document.getElementById('submit').disabled = true;
-        } 
-        else document.getElementById('submit').disabled = false;
-    }
+  input[type="email"] + label {
+    pointer-events: none;
 
-    function submitForm(event){
-      event.preventDefault()
-      if (!document.getElementsByClassName('invalid').length>0){
-        authService[key](JSON.stringify(obj)).then(resp => {
-          {
-            setItemToLocalStorage('Token',resp['key'])
-            setItemToLocalStorage('username',obj['username'])
-            if (resp){
-              alert(`User ${message[validKeyLength - 2]}`)
-              window.location.href = '/'
-            }
+    * {
+      pointer-events: all;
+    }
+  }
+</style>
+<div class="center teal-text">
+  <h3 class="title">Sign Up Form</h3>
+  <h3 class="title hide">Login Form</h3>
+  <div class="row s6 offset-s6">
+    <form class="col s6 offset-s3">
+      <div class="row">
+        <div class="input-field col s12">
+          <input
+            oninput="onChangeInput(event)"
+            placeholder="Placeholder"
+            id="first_name"
+            name="username"
+            type="text"
+            class="validate"
+            required
+          />
+          <label for="first_name">User Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input
+            oninput="onChangeInput(event)"
+            id="password"
+            type="password"
+            class="validate"
+            name="password"
+            required
+          />
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <div class="row" id="email">
+        <div class="input-field col s12">
+          <input
+            oninput="onChangeInput(event)"
+            id="email"
+            type="email"
+            class="validate"
+            name="email"
+          />
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button
+            id="submit"
+            onclick="submitForm(event)"
+            class="btn waves-effect waves-light"
+            name="action"
+            disabled
+          >
+            Submit
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 link">
+          <h6 id="subText1" onclick="onSwitchPage(event,'subText2')">
+            Already a User, Log in instead.
+          </h6>
+          <h6
+            class="hide"
+            id="subText2"
+            onclick="onSwitchPage(event,'subText1')"
+          >
+            Not a User, Sing Up.
+          </h6>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="{% static 'frontend/api.js' %}"></script>
+<script type="module" src="{% static 'frontend/utilMethods.js' %}"></script>
+<script type="text/javascript">
+  let obj = {};
+  let validKeyLength = 3;
+  let message = ["Logged In", "Signed Up"];
+  const PAGE_NAMES = { signUpUser: "signUpUser", loginUser: "loginUser" };
+  let key = PAGE_NAMES.signUpUser;
+
+  function onChangeInput({ target: { value, name } }) {
+    obj[name] = value;
+    validFrom();
+  }
+  function validFrom() {
+    if (
+      Object.keys(obj).length < validKeyLength ||
+      !document.getElementsByClassName("invalid")
+    ) {
+      document.getElementById("submit").disabled = true;
+    } else document.getElementById("submit").disabled = false;
+  }
+
+  function submitForm(event) {
+    event.preventDefault();
+    if (!document.getElementsByClassName("invalid").length > 0) {
+      authService[key](JSON.stringify(obj)).then((resp) => {
+        {
+          setItemToLocalStorage("Token", resp["key"]);
+          setItemToLocalStorage("username", obj["username"]);
+          if (resp) {
+            alert(`User ${message[validKeyLength - 2]}`);
+            window.location.href = "/";
           }
-        })
-      }
+        }
+      });
     }
+  }
 
-    function onSwitchPage({target},id){
-      validKeyLength = validKeyLength === 3 ? 2 : 3;
-      key = key === PAGE_NAMES[0] ? PAGE_NAMES[1] : PAGE_NAMES[0]
-      hideOrShowElement(document.getElementById('email'))
-      showSubText(target,id)
-      changeTitle()
-      clearInputs()
+  function onSwitchPage({ target }, id) {
+    validKeyLength = validKeyLength === 3 ? 2 : 3;
+    key =
+      key === PAGE_NAMES.signUpUser
+        ? PAGE_NAMES.loginUser
+        : PAGE_NAMES.signUpUser;
+    hideOrShowElement(document.getElementById("email"));
+    showSubText(target, id);
+    changeTitle();
+    clearInputs();
+  }
+
+  function changeTitle() {
+    let nodes = Array.from(document.getElementsByClassName("title"));
+    nodes.map((x) => hideOrShowElement(x));
+  }
+
+  function hideOrShowElement(element) {
+    if (element.classList.contains("hide")) {
+      element.classList.remove("hide");
+    } else {
+      element.classList.add("hide");
     }
+  }
 
-    function changeTitle(){
-      let nodes = Array.from(document.getElementsByClassName('title'))
-      nodes.map(x => hideOrShowElement(x))
-    }
+  function showSubText(target, id) {
+    hideOrShowElement(target);
+    hideOrShowElement(document.getElementById(id));
+  }
 
-    function hideOrShowElement(element){
-      if (element.classList.contains('hide')) {
-        element.classList.remove('hide')
-      }
-      else {
-        element.classList.add('hide')
-      }
-    }
-
-    function showSubText(target,id){
-      hideOrShowElement(target)
-      hideOrShowElement(document.getElementById(id))      
-    }
-
-    function clearInputs(){
-      obj = {}
-      Array.from(document.getElementsByTagName('input')).map(x => {
-        x.value = ''
-        x.classList.remove('invalid')
-      })
-    }
-
-
+  function clearInputs() {
+    obj = {};
+    Array.from(document.getElementsByTagName("input")).map((x) => {
+      x.value = "";
+      x.classList.remove("invalid");
+    });
+  }
 </script>
 {% endblock %}
