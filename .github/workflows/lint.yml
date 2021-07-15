@@ -27,3 +27,4 @@ jobs:
           git_name: HAL-101
           git_email: HAL-101@github.com
           commit-message: 'Linting issues detected using ${linter}'
+          continue_on_error: false
