@@ -1,7 +1,9 @@
-class EmailConstants:
-    WELCOME_SUBJECT = 'Welcome Message'
-    HTML_TYPE = 'html'
+from enum import Enum
 
 
-class Constant:
-    EMAIL = EmailConstants()
+class EmailConstants(Enum):
+    WELCOME_SUBJECT = "Welcome Message"
+    HTML_TYPE = "html"
+
+    def __repr__(self) -> str:
+        return self.value

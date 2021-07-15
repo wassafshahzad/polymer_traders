@@ -1,1 +1,1 @@
-from .constants import Constant
+from .constants import EmailConstants
