@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'dj_rest_auth',
     'django_filters',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +139,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 
 STAGING = os.environ.get('STAGING', False)
 STATIC_URL = '/static/'
