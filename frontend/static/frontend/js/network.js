@@ -1,18 +1,15 @@
 import { ERROR_CODES } from "./constants.js";
-class CustomError extends Error{
-  constructor(status,message){
-      super(message)
-      this.status = status
+class CustomError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
   }
-} 
+}
 
 function _handleErrors({ status, data, message }) {
-  if (
-    message === 'Network Error' ||
-    message === 'Failed to fetch'
-  ) {
+  if (message === "Network Error" || message === "Failed to fetch") {
     alert(
-      'Request could not be completed, please check your internet connection.'
+      "Request could not be completed, please check your internet connection."
     );
   }
   if (status) {
@@ -21,7 +18,6 @@ function _handleErrors({ status, data, message }) {
     alert("Sorry, something went wrong.");
   }
 }
-
 
 function customFetch(
   url,
@@ -40,7 +36,7 @@ function customFetch(
   })
     .then((response) => {
       if (!response.ok) {
-        throw new CustomError(response.status,response.statusText);
+        throw new CustomError(response.status, response.statusText);
       }
       return response.json();
     })

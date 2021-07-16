@@ -1,1 +1,1 @@
-web: python3 manage.py runserver
+worker: celery -A traders worker -l info
