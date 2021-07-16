@@ -1,21 +1,13 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-<style>
-
-</style>
+{% extends 'base.html' %} {% load static %} {% block content %}
+<style></style>
 <div class="center">
-    <h2>Welcome,To Polymer Traders <span id = 'username' class='teal-text'></span></h2>
+  <h2>
+    Welcome,To Polymer Traders <span id="username" class="teal-text"></span>
+  </h2>
 </div>
-<script type="module" src="{% static 'frontend/utilMethods.js' %}"></script>
-<script type="text/javascript">
-    function setUserName(){
-        let element = document.getElementById('username')
-        element.innerHTML = getItemFromLocalStorage('username')
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        setUserName()
-     });
-</script>
+<script type="module" src="{% static 'frontend/js/utilMethods.js' %}"></script>
+<script
+  type="text/javascript"
+  src="{% static 'frontend/js/welcome.js' %}"
+></script>
 {% endblock %}
