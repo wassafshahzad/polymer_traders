@@ -13,14 +13,8 @@ class Router extends HTMLElement {
     this.shadowRoot.append(divWrapper);
   }
 
-  connectedCallback() {
-    this.shadowRoot.firstElementChild.addEventListener(
-      "page-change",
-      (event) => {
-        console.log("caufght");
-      }
-    );
-    console.log(this.getAttribute("page"));
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.table(oldValue);
   }
 }
 
