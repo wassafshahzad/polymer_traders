@@ -5,6 +5,11 @@
     Welcome,To Polymer Traders <span id="username" class="teal-text"></span>
   </h2>
 </div>
+
+<router-element page="welcome">
+  <p slot="my-pages">Page 1</p>
+</router-element>
+<button onclick="changePage(event)">Change Page</button>
 <script type="module" src="{% static 'frontend/js/utilMethods.js' %}"></script>
 <script
   type="text/javascript"
