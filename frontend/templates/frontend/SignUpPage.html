@@ -133,14 +133,17 @@
 
   function onSwitchPage({ target }, id) {
     validKeyLength = validKeyLength === 3 ? 2 : 3;
-    key =
-      key === PAGE_NAMES.signUpUser
-        ? PAGE_NAMES.loginUser
-        : PAGE_NAMES.signUpUser;
+    key = getKey(key);
     hideOrShowElement(document.getElementById("email"));
     showSubText(target, id);
     changeTitle();
     clearInputs();
+  }
+
+  function getKey(previousKey) {
+    return key == PAGE_NAMES.signUpUser
+      ? PAGE_NAMES.loginUser
+      : PAGE_NAMES.signUpUser;
   }
 
   function changeTitle() {
