@@ -4,8 +4,7 @@ function setUserName() {
 }
 
 function clickButton() {
-  let a = document.getElementById("route");
-  a.setAttribute("page", "change");
+  changePage("change");
 }
 
 document.addEventListener("DOMContentLoaded", function () {
