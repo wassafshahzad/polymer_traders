@@ -11,13 +11,16 @@ from tradersapi.models import ChemicalModel, ChemicalTypeModel
 
 class UserProfileModel(models.Model):
 
-    owner = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="profile")
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     name = models.CharField(max_length=255, blank=False, null=False)
     company_name = models.CharField(max_length=255, blank=True, null=True)
     phone_number = PhoneNumberField(null=False, blank=False, unique=True)
     profile_picture = models.ImageField(
-        upload_to="upload/", blank=True, null=True, default=static('default_profile_pic.png'))
+        upload_to="upload/",
+        blank=True,
+        null=True,
+        default=static("default_profile_pic.png"),
+    )
 
     class Meta:
         verbose_name = "UserProfileModel"
@@ -31,33 +34,26 @@ class UserProfileModel(models.Model):
 
 
 class UserPost(models.Model):
-    STATUS_CHOICES = [
-        ('1', 'Active'),
-        ('2', 'Archived'),
-        ('0', 'Processing')
-    ]
-    TYPE_CHOICES = [
-        ('0', 'sell'),
-        ('1', 'buy')
-    ]
+    STATUS_CHOICES = [("1", "Active"), ("2", "Archived"), ("0", "Processing")]
+    TYPE_CHOICES = [("0", "sell"), ("1", "buy")]
+    UNIT = [("1", "KG"), ("2", "POUND"), ("3", "DRUM"), ("4", "BAG")]
 
-    UNIT = [
-        ('1', 'KG'),
-        ('2', 'POUND'),
-        ('3', 'DRUM'),
-        ('4', 'BAG')
-    ]
     quantity = models.PositiveIntegerField(null=False, blank=False)
-    unit = models.CharField(max_length=1, choices=UNIT, default='1')
+    unit = models.CharField(max_length=1, choices=UNIT, default="1")
     created_by = models.ForeignKey(
-        'UserProfileModel', related_name='created_by', on_delete=models.CASCADE)
+        "UserProfileModel", related_name="created_by", on_delete=models.CASCADE
+    )
     status = models.CharField(
-        max_length=1, choices=STATUS_CHOICES, null=False, blank=False)
+        max_length=1, choices=STATUS_CHOICES, null=False, blank=False
+    )
     post_type = models.CharField(
-        max_length=1, choices=TYPE_CHOICES, null=False, blank=False)
+        max_length=1, choices=TYPE_CHOICES, null=False, blank=False
+    )
     text = models.CharField(max_length=255, null=True, blank=True)
     chemical = models.ForeignKey(
-        ChemicalModel, related_name='post', on_delete=models.CASCADE)
+        ChemicalModel, related_name="post", on_delete=models.CASCADE
+    )
     chemical_type = models.ForeignKey(
-        ChemicalTypeModel, related_name='post', on_delete=models.CASCADE)
+        ChemicalTypeModel, related_name="post", on_delete=models.CASCADE
+    )
     created_at = DateTimeField(auto_now_add=True)
