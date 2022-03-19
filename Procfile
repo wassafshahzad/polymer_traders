@@ -1,1 +1,0 @@
-worker: celery -A traders worker -l info

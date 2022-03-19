@@ -1,4 +1,5 @@
-from django.db.models.enums import Choices
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.fields import DateTimeField
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -8,6 +9,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from tradersapi.models import ChemicalModel, ChemicalTypeModel
 
+
+class ImageModel(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_obj = GenericForeignKey("content_type", "object_id")
+    image =models.ImageField(
+        upload_to="upload/", blank=True, null=True)
 
 class UserProfileModel(models.Model):
 
@@ -61,3 +69,4 @@ class UserPost(models.Model):
     chemical_type = models.ForeignKey(
         ChemicalTypeModel, related_name='post', on_delete=models.CASCADE)
     created_at = DateTimeField(auto_now_add=True)
+    images = GenericRelation(ImageModel)

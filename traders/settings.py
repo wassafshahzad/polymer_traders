@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'dj_rest_auth',
     'django_filters',
-    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -147,20 +146,11 @@ if STAGING:
     import django_on_heroku
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
-    REDIS_HOST = os.environ.get('REDIS_HOST')
-    CELERY_RESULT_BACKEND = BROKER_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}'
     django_on_heroku.settings(locals())
 
 else:
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'static')
-    CELERY_RESULT_BACKEND = BROKER_URL = 'redis://localhost:6379'
 
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = os.environ.get('SMTP_HOST')
