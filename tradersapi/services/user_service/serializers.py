@@ -1,5 +1,5 @@
-from tradersapi.task import send_welcome_email_on_signup
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
@@ -10,8 +10,15 @@ from tradersapi.models import (
     ChemicalModel,
     ChemicalTypeModel,
 )
+from tradersapi.services.user_service.models import ImageModel
 from tradersapi.util.util_methods import has_user_profile
 
+
+
+class ImageModelSerialzier(serializers.ModelSerializer):
+    class Meta:
+        model = ImageModel
+        fields = ("image",)
 
 class UserProfileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -55,6 +62,7 @@ class AuthUserSerializer(serializers.ModelSerializer):
 
 class UserPostSerializer(serializers.ModelSerializer):
     created_by = UserProfileSerializer(read_only=True)
+    images = ImageModelSerialzier(many=True)
     chemical = serializers.SlugRelatedField(
         slug_field="chemical_name", queryset=ChemicalModel.objects.all()
     )
@@ -71,11 +79,20 @@ class UserPostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile = self.context.get("user").profile
         status = "1"
-        return UserPost.objects.create(
+        images = validated_data.pop("images")
+        post = UserPost.objects.create(
             status=status,
             created_by=profile,
             **validated_data,
         )
+        self._bulk_create_images(images, post)
+        return post
+
+    def _bulk_create_images(self, images, post):
+        image = []
+        for x in images:
+            image.append(ImageModel(image=x["image"], content_obj=post))
+        ImageModel.objects.bulk_create(image)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -88,3 +105,4 @@ class UserPostSerializer(serializers.ModelSerializer):
         model = UserPost
         fields = "__all__"
         read_only_fields = ("status",)
+        depth=1
