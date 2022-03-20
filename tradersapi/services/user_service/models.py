@@ -12,7 +12,7 @@ from tradersapi.models import ChemicalModel, ChemicalTypeModel
 
 class ImageModel(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    object_id = models.PositiveIntegerField(blank=True, null=True)
     content_obj = GenericForeignKey("content_type", "object_id")
     image =models.ImageField(
         upload_to="upload/", blank=True, null=True)
