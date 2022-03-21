@@ -1,3 +1,4 @@
+from email.mime import image
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from rest_framework import serializers
@@ -62,7 +63,7 @@ class AuthUserSerializer(serializers.ModelSerializer):
 
 class UserPostSerializer(serializers.ModelSerializer):
     created_by = UserProfileSerializer(read_only=True)
-    images = ImageModelSerialzier(many=True)
+    images = ImageModelSerialzier(many=False)
     chemical = serializers.SlugRelatedField(
         slug_field="chemical_name", queryset=ChemicalModel.objects.all()
     )
@@ -71,6 +72,15 @@ class UserPostSerializer(serializers.ModelSerializer):
     )
     status = serializers.CharField(required=False)
 
+    # remove this fucntion to allow multiple uploads
+    def to_internal_value(self, data):
+        image = data.pop("images")
+        data["images.image"]  = image[0] or None
+        return super().to_internal_value(data)
+
+    def to_representation(self, instance):
+        return super().to_representation(instance)
+    
     def is_valid(self, raise_exception):
         if not has_user_profile(self.context.get("user")):
             raise serializers.ValidationError("Profile Does not Exist")
@@ -85,20 +95,15 @@ class UserPostSerializer(serializers.ModelSerializer):
             created_by=profile,
             **validated_data,
         )
-        self._bulk_create_images(images, post)
+        ImageModel.objects.create(**images, content_obj=post)
         return post
-
-    def _bulk_create_images(self, images, post):
-        image = []
-        for x in images:
-            image.append(ImageModel(image=x["image"], content_obj=post))
-        ImageModel.objects.bulk_create(image)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["status"] = instance.get_status_display()
         data["post_type"] = instance.get_post_type_display()
         data["unit"] = instance.get_unit_display()
+        data["images"] = ImageModelSerialzier(instance.images.all().first()).data
         return data
 
     class Meta:

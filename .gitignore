@@ -4,3 +4,4 @@ static/
 env/
 .vscode/
 media/*
+frontend/*
