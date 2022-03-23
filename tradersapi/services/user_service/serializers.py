@@ -1,6 +1,4 @@
-from email.mime import image
 from django.contrib.auth.models import User
-from django.templatetags.static import static
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
@@ -103,7 +101,8 @@ class UserPostSerializer(serializers.ModelSerializer):
         data["status"] = instance.get_status_display()
         data["post_type"] = instance.get_post_type_display()
         data["unit"] = instance.get_unit_display()
-        data["images"] = ImageModelSerialzier(instance.images.all().first()).data
+        data["images"] = ImageModelSerialzier(
+            instance.images.all().first(), context = {"request": self.context.get("request")}).data
         return data
 
     class Meta:
