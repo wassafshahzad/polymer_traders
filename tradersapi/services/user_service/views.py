@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from tradersapi.models import UserProfileModel, UserPost
 from tradersapi.util.permissions import IsOwnerOrReadOnly
 from .serializers import UserProfileSerializer, AuthUserSerializer, UserPostSerializer
-
+from .filters import UserPostFilter
 
 class UserProfileListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -38,7 +38,7 @@ class UserPostListCreateAPIView(generics.ListCreateAPIView):
     queryset = UserPost.objects.filter(status="1").order_by("-created_at")
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["created_by", "post_type", "chemical", "chemical_type"]
+    filterset_class = UserPostFilter
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
