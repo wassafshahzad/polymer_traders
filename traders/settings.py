@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     'tradersapi',
     'phonenumber_field',
     'dj_rest_auth',
@@ -142,14 +146,20 @@ USE_TZ = True
 STAGING = os.environ.get('STAGING', False)
 STATIC_URL = '/static/'
 
+CALL_BACK_POST_FIX = "/trader/api/v1/social-auth/google/login/callback/"
+
 if STAGING:
     import django_on_heroku
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     django_on_heroku.settings(locals())
-
+    GOOGLE_CALLBACK_URL = "{}{}".format(os.environ.get('GOOGLE_CALLBACK'), CALL_BACK_POST_FIX)
 else:
     STATIC_ROOT = Path.joinpath(BASE_DIR, 'static')
+    GOOGLE_CALLBACK_URL = \
+        f"localhost:8000{CALL_BACK_POST_FIX}"
+
+SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
