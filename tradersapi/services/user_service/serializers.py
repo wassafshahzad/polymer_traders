@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-
+from .fields import CreatableSlugField
 
 from tradersapi.models import (
     UserProfileModel,
@@ -13,11 +13,11 @@ from tradersapi.services.user_service.models import ImageModel
 from tradersapi.util.util_methods import has_user_profile
 
 
-
 class ImageModelSerialzier(serializers.ModelSerializer):
     class Meta:
         model = ImageModel
         fields = ("image",)
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -61,24 +61,25 @@ class AuthUserSerializer(serializers.ModelSerializer):
 
 class UserPostSerializer(serializers.ModelSerializer):
     created_by = UserProfileSerializer(read_only=True)
-    images = ImageModelSerialzier(many=False)
-    chemical = serializers.SlugRelatedField(
+    images = ImageModelSerialzier(many=False, required=False, allow_null=True)
+    chemical = CreatableSlugField(
         slug_field="chemical_name", queryset=ChemicalModel.objects.all()
     )
-    chemical_type = serializers.SlugRelatedField(
+    chemical_type = CreatableSlugField(
         slug_field="chem_type", queryset=ChemicalTypeModel.objects.all()
     )
     status = serializers.CharField(required=False)
 
     # remove this fucntion to allow multiple uploads
     def to_internal_value(self, data):
-        image = data.pop("images")
-        data["images.image"]  = image[0] or None
+        if "images" in data: 
+            image = data.pop("images")
+            data["images.image"] = image[0]
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
         return super().to_representation(instance)
-    
+
     def is_valid(self, raise_exception):
         if not has_user_profile(self.context.get("user")):
             raise serializers.ValidationError("Profile Does not Exist")
@@ -87,13 +88,14 @@ class UserPostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile = self.context.get("user").profile
         status = "1"
-        images = validated_data.pop("images")
         post = UserPost.objects.create(
             status=status,
             created_by=profile,
             **validated_data,
         )
-        ImageModel.objects.create(**images, content_obj=post)
+        if "images" in validated_data:
+            images = validated_data.pop("images")
+            ImageModel.objects.create(**images, content_obj=post)
         return post
 
     def to_representation(self, instance):
@@ -102,11 +104,13 @@ class UserPostSerializer(serializers.ModelSerializer):
         data["post_type"] = instance.get_post_type_display()
         data["unit"] = instance.get_unit_display()
         data["images"] = ImageModelSerialzier(
-            instance.images.all().first(), context = {"request": self.context.get("request")}).data
+            instance.images.all().first(),
+            context={"request": self.context.get("request")},
+        ).data
         return data
 
     class Meta:
         model = UserPost
         fields = "__all__"
         read_only_fields = ("status",)
-        depth=1
+        depth = 1
