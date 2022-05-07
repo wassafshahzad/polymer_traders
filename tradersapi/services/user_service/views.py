@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.models import User
@@ -19,12 +20,9 @@ class UserProfileListCreateAPIView(generics.ListCreateAPIView):
         return context
 
     def list(self, request, *args, **kwargs):
-        if kwargs.get("current", False):
-            return Response(
-                self.get_serializer(
-                    UserProfileModel.objects.get(owner=request.user)
-                ).data
-            )
+        if kwargs.get("current", False) and not request.user.is_anonymous:
+            user_profile = get_object_or_404(UserProfileModel, owner= request.user)
+            return Response(self.get_serializer(user_profile).data)
         return super().list(request, *args, **kwargs)
 
 
