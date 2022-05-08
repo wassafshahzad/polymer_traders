@@ -88,14 +88,14 @@ class UserPostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile = self.context.get("user").profile
         status = "1"
+        images = validated_data.pop("images", None)
         post = UserPost.objects.create(
             status=status,
             created_by=profile,
             **validated_data,
         )
-        if "images" in validated_data:
-            images = validated_data.pop("images")
-            ImageModel.objects.create(**images, content_obj=post)
+        if images:
+            images = ImageModel.objects.create(**images, content_obj=post)
         return post
 
     def to_representation(self, instance):
