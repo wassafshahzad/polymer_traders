@@ -45,7 +45,7 @@ class UserPostListCreateAPIView(generics.ListCreateAPIView):
         return context
 
 
-class UserPostRetrieveAPIView(generics.RetrieveAPIView):
+class UserPostRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserPostSerializer
     queryset = UserPost.objects.filter(status="1")
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
