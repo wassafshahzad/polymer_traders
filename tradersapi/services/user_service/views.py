@@ -50,6 +50,12 @@ class UserPostRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserPost.objects.filter(status="1")
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["user"] = self.request.user
+        context["request"] = self.request
+        return context
+
 
 class UserProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
